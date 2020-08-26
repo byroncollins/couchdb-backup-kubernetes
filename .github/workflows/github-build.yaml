@@ -6,7 +6,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Login to RedHat Registry
-      run: echo "${{ secrets.REDHAT_REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REDHAT_REGISTRY_USERNAME }}" --password-stdin
+      run: echo "${{ secrets.REDHAT_REGISTRY_PASSWORD }}" | docker login registry.redhat.io -u "${{ secrets.REDHAT_REGISTRY_USERNAME }}" --password-stdin
     - name: Publish to Docker Repository
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
