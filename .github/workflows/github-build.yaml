@@ -7,7 +7,7 @@ jobs:
     - name: checkout code
       uses: actions/checkout@v2
     - name: redhat registry login
-      run: echo "${{ secrets.REDHAT_REGISTRY_PASSWORD }}" | docker login registry.redhat.io -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      run: echo "${{ secrets.REDHAT_REGISTRY_PASSWORD }}" | docker login registry.redhat.io -u "${{ secrets.REDHAT_REGISTRY_USERNAME }}" --password-stdin
     - name: Build and push Docker images
       uses: docker/build-push-action@v1
       with:
