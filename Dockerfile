@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-12
+FROM registry.redhat.io/ubi8/nodejs-12
 
 
 ENV IGNORE_TLS=false \
