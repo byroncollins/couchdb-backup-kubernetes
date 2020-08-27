@@ -9,8 +9,10 @@ jobs:
       
     - name: redhat registry login
       run: echo "${{ secrets.REDHAT_REGISTRY_PASSWORD }}" | docker login registry.redhat.io -u "${{ secrets.REDHAT_REGISTRY_USERNAME }}" --password-stdin
-    - name: pull base image
+    - name: pull base ubi images
       run: docker pull registry.redhat.io/ubi8/nodejs-12
+    - name: pull base nodejs images
+      run: docker pull node:12-alpine
 
     - name: Build and push Docker redhat ubi images
       uses: docker/build-push-action@v1
