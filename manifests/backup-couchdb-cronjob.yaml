@@ -1,0 +1,43 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-couchdb
+spec:
+  # run at the top of every hour see https://crontab.guru/#0_*_*_*_*
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            # the name of your image in the registry
+            image: byroncollins/couchbackup:latest
+            # environment variables
+            env:
+              # add your CouchDB configuration here
+              - name: COUCH_URL
+                value: "https://my-couchdb.couchdb.svc.cluster.local"
+              - name: COUCH_DATABASE
+                value: "hello-world"
+              - name: DESTINATION_DIRECTORY
+                value: "/var/couchdbbackups"
+              - name: COUCH_USERNAME
+                value: "admin"
+              - name: "COUCH_PASSWORD"
+                valueFrom:
+                  secretKeyRef:
+                    key: admin_password
+                    name: c-my-couchdb-m
+            volumeMounts:
+              - mountPath: /var/couchdbbackups
+                name: backup-volume
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: couchdb-backup-pvc
+          restartPolicy: OnFailure

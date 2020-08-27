@@ -1,0 +1,37 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: purge-couchdb-backups
+spec:
+  # run daily see https://crontab.guru/#5_0_*_*_*
+  schedule: "5 0 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: purge
+            # the name of your image in the registry
+            image: registry.redhat.io/ubi8/ubi:latest
+            env:
+              - name: DESTINATION_DIRECTORY
+                value: "/var/couchdbbackups"
+              - name: RETENTION_PERIOD_DAYS
+                value: "1"
+            command: ["/bin/sh"]
+            args:
+              - "-c" 
+              - "/usr/bin/find $(DESTINATION_DIRECTORY) -type f -mtime +$(RETENTION_PERIOD_DAYS) -delete -print" 
+            # environment variables
+            volumeMounts:
+              - mountPath: /var/couchdbbackups
+                name: backup-volume
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: couchdb-backup-pvc
+          restartPolicy: OnFailure

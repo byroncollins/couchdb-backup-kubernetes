@@ -13,13 +13,13 @@ USER root
 WORKDIR /opt/app-root/src
 COPY backup.sh /opt/app-root/src/backup.sh
 RUN npm install -g @cloudant/couchbackup \
-&& mkdir -p /var/couchdbbackups \
-&& chmod -R g+wrx /var/couchdbbackups \
-&& chgrp -R 0 /var/couchdbbackups \
+&& mkdir -p ${DESTINATION_DIRECTORY} \
+&& chmod -R g+wrx ${DESTINATION_DIRECTORY} \
+&& chgrp -R 0 ${DESTINATION_DIRECTORY} \
 && chmod +x /opt/app-root/src/backup.sh \
-&& chmod -R g=u ${MULE_HOME} /etc/passwd
+&& chmod -R g=u /opt/app-root/src /etc/passwd
 
 USER 1001
 
-VOLUME /var/couchdbbackups
+VOLUME ${DESTINATION_DIRECTORY}
 CMD /opt/app-root/src/backup.sh
