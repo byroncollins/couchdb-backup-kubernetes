@@ -1,4 +1,5 @@
-FROM registry.redhat.io/ubi8/nodejs-12
+ARG BASEIMAGE
+FROM ${BASEIMAGE}
 
 
 ENV IGNORE_TLS=false \
