@@ -13,7 +13,8 @@ USER root
 
 WORKDIR /opt/app-root/src
 COPY backup.sh /opt/app-root/src/backup.sh
-RUN npm install -g @cloudant/couchbackup \
+RUN apk add --no-cache bash \
+&& npm install -g @cloudant/couchbackup \
 && mkdir -p ${DESTINATION_DIRECTORY} \
 && chmod -R g+wrx ${DESTINATION_DIRECTORY} \
 && chgrp -R 0 ${DESTINATION_DIRECTORY} \
