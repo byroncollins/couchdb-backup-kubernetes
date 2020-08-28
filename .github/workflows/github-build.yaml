@@ -7,8 +7,8 @@ jobs:
       fail-fast: false
       matrix:
         baseimage:
-          - { image: "registry.redhat.io/ubi8/nodejs-12", tag:  nodejs-12-ubi, dockerfile: Dockerfile.alpine }
-          - { image: "node:12-alpine", tag: nodejs-12-alpine, dockerfile: Dockerfile.ubi }
+          - { image: "registry.redhat.io/ubi8/nodejs-12", tag:  nodejs-12-ubi, dockerfile: Dockerfile.ubi }
+          - { image: "node:12-alpine", tag: nodejs-12-alpine, dockerfile: Dockerfile.alpine }
     steps:
     - name: checkout code
       uses: actions/checkout@v2
