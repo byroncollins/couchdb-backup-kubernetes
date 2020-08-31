@@ -7,6 +7,10 @@ ENV IGNORE_TLS=false \
     COUCH_PASSWORD= \
     COUCH_URL= \
     COUCH_DATABASE= \
+    BUFFER_SIZE=500 \
+    MODE=full \
+    REQUEST_TIMEOUT=120000 \
+    PARALLELISM=5 \
     DESTINATION_DIRECTORY=/var/couchdbbackups
 
 USER root

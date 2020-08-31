@@ -62,7 +62,9 @@ else
 fi
 
 couchbackup \
+    --buffer-size ${BUFFER_SIZE} \
+    --mode ${MODE} \
+    --request-timeout ${REQUEST_TIMEOUT} \
+    --parallelism ${PARALLELISM} \
     --url ${COUCH_URL_FULL} \
     --db ${COUCH_DATABASE} | gzip > ${DESTFILE}
-
-

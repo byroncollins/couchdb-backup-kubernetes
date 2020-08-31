@@ -1,10 +1,24 @@
 # Container to create couchdb Backups on Kubernetes
 
-container image for backing up couchdb on Kubernetes or OpenShift clusters
+Container image for backing up couchdb on Kubernetes or OpenShift clusters
 
 Run as a Cronjob to backup to persistent storage
 
 The driver was to backup couchdb databases that are deployed using the couchDB operator
+
+uses the nodejs tool couchbackup
+
+https://github.com/cloudant/couchbackup
+
+# Generated Images
+
+## Alpine base image
+docker.io/byroncollins/couchbackup:nodejs-12-alpine
+
+## Red Hat UBI image
+
+docker.io/byroncollins/couchbackup:nodejs-12-ubi
+
 
 # Install 
 
@@ -18,11 +32,27 @@ oc apply -f manifests/couchdb-backup-pvc.yaml
 
 ## Create cronjob for backing up your couchdb
 
-Environment variables
+### Environment variables
 
-### COUCH_URL
+| Environment Variable | Default  |
+| ------------- |-------------|
+| IGNORE_TLS | false |
+| COUCH_USERNAME | null |
+| COUCH_PASSWORD | null |
+| COUCH_URL| null |
+| COUCH_DATABASE | null |
+| BUFFER_SIZE | 500 |
+| MODE | full |
+| REQUEST_TIMEOUT | 120000 |
+| PARALLELISM | 5 |
+| DESTINATION_DIRECTORY | /var/couchdbbackups |
 
-COUCH_URL is required for the couchbackuo script to access the couchDB instance
+
+### Required Environment Variables
+
+#### COUCH_URL
+
+COUCH_URL is required for the couchbackup script to access the couchDB instance
 
 It can point to an external route or internal service (recommended) if running the cronjob in the same project as your couchdb instance
 
@@ -58,3 +88,9 @@ oc project <project name>
 oc apply -f mainfests/backup-couchdb-cronjob.yaml
 ```
 
+# Running in Docker
+
+```bash
+#Map backup volume to your drive
+docker run --network host --rm -it --env COUCH_URL=https://my-couchdb-couchdb.apps.example.com --env COUCH_DATABASE=hello-world --env COUCH_USERNAME=admin --env COUCH_PASSWORD=changeme --env IGNORE_TLS=true --env DESTINATION_DIRECTORY=/var/couchdbbackups -v /host/backup:/var/couchdbbackups byroncollins/couchbackup:nodejs-12-alpine
+```

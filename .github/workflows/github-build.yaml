@@ -18,7 +18,7 @@ jobs:
     - name: pull base ubi images
       run: docker pull registry.redhat.io/ubi8/nodejs-12
 
-    - name: Build and push Docker redhat ubi images
+    - name: Build and push Docker images
       uses: docker/build-push-action@v1
       with:
         build_args: BASEIMAGE=${{ matrix.baseimage.image }}
@@ -27,5 +27,4 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: byroncollins/couchbackup
         tags: ${{ matrix.baseimage.tag }}
-        tag_with_ref: true
         cache_froms: registry.redhat.io/ubi8/nodejs-12
