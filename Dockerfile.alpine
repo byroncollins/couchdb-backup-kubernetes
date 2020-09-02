@@ -16,16 +16,17 @@ ENV IGNORE_TLS=false \
 USER root
 
 WORKDIR /opt/app-root/src
-COPY backup.sh /opt/app-root/src/backup.sh
+COPY docker-entrypoint.sh /opt/app-root/src/docker-entrypoint.sh
 RUN apk add --no-cache bash \
 && npm install -g @cloudant/couchbackup \
 && mkdir -p ${DESTINATION_DIRECTORY} \
 && chmod -R g+wrx ${DESTINATION_DIRECTORY} \
 && chgrp -R 0 ${DESTINATION_DIRECTORY} \
-&& chmod +x /opt/app-root/src/backup.sh \
+&& chmod +x /opt/app-root/src/docker-entrypoint.sh \
 && chmod -R g=u /opt/app-root/src /etc/passwd
 
 USER 1001
 
 VOLUME ${DESTINATION_DIRECTORY}
-CMD /opt/app-root/src/backup.sh
+ENTRYPOINT [ "docker-entrypoint.sh" ]
+CMD ["backup"]

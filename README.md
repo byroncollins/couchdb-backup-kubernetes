@@ -10,6 +10,11 @@ uses the nodejs tool couchbackup
 
 https://github.com/cloudant/couchbackup
 
+Provides two nodejs binaries
+
+* couchbackup
+* couchrestore
+
 # Generated Images
 
 ## Alpine base image
@@ -93,4 +98,45 @@ oc apply -f mainfests/backup-couchdb-cronjob.yaml
 ```bash
 #Map backup volume to your drive
 docker run --network host --rm -it --env COUCH_URL=https://my-couchdb-couchdb.apps.example.com --env COUCH_DATABASE=hello-world --env COUCH_USERNAME=admin --env COUCH_PASSWORD=changeme --env IGNORE_TLS=true --env DESTINATION_DIRECTORY=/var/couchdbbackups -v /host/backup:/var/couchdbbackups byroncollins/couchbackup:nodejs-12-alpine
+```
+
+# Restore couchdb
+
+## Kubernetes/OpenShift
+
+```bash
+oc run couchrestore \
+    --command=true \
+    --env=COUCH_DATABASE=hello-world \
+    --env=DESTINATION_DIRECTORY=/var/couchdbbackups \
+    --env=COUCH_USERNAME=admin \
+    --env=COUCH_PASSWORD=changeme \
+    --env=COUCH_URL=https://my-couchdb.couchdb.svc.cluster.local \
+    --replicas=0 \
+    --image=byroncollins/couchbackup:nodejs-12-alpine restore
+
+oc set volumes dc/couchrestore \
+   --add --overwrite \
+   -t persistentVolumeClaim \
+   --claim-name=couchdb-backup-pvc \
+   --mount-path=/var/couchdbbackups \
+   --name=backup-volume
+
+
+## Docker
+
+
+```bash
+#Map backup volume to your drive
+docker run --network host --rm -it --env COUCH_URL=https://my-couchdb-couchdb.apps.example.com --env COUCH_DATABASE=hello-world --env COUCH_USERNAME=admin --env COUCH_PASSWORD=changeme --env IGNORE_TLS=true --env DESTINATION_DIRECTORY=/var/couchdbbackups -v /host/backup:/var/couchdbbackups byroncollins/couchbackup:nodejs-12-alpine restore
+
+*** Restore Instructions ***
+-----------------------------
+1. Locate the backup to restore from in /var/couchdbbackups
+2. Run the following command to restore the database
+   cat /var/couchdbbackups/hello-world.<timestamp>.txt.gz | gunzip | couchrestore -db hello-world --url ${COUCH_URL_FULL}
+-----------------------------
+bash-4.4$ 
+bash-4.4$ cat /var/couchdbbackups/hello-world.20203031-173011.txt.gz | gunzip | couchrestore --url ${COUCH_URL_FULL}
+
 ```
