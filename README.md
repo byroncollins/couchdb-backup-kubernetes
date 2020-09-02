@@ -106,14 +106,17 @@ docker run --network host --rm -it --env COUCH_URL=https://my-couchdb-couchdb.ap
 
 ```bash
 oc run couchrestore \
-    --command=true \
-    --env=COUCH_DATABASE=hello-world \
-    --env=DESTINATION_DIRECTORY=/var/couchdbbackups \
-    --env=COUCH_USERNAME=admin \
-    --env=COUCH_PASSWORD=changeme \
-    --env=COUCH_URL=https://my-couchdb.couchdb.svc.cluster.local \
-    --replicas=0 \
-    --image=byroncollins/couchbackup:nodejs-12-alpine restore
+   --rm \
+   -i \
+   --tty \
+   --command=true \
+   --env=COUCH_DATABASE=hello-world \
+   --env=DESTINATION_DIRECTORY=/var/couchdbbackups \
+   --env=COUCH_USERNAME=admin \
+   --env=COUCH_PASSWORD=changeme \
+   --env=COUCH_URL=https://my-couchdb.couchdb.svc.cluster.local \
+   --replicas=0 \
+   --image=byroncollins/couchbackup:nodejs-12-alpine -- restore
 
 oc set volumes dc/couchrestore \
    --add --overwrite \

@@ -54,9 +54,9 @@ if [ -n "${COUCH_USERNAME}" ] || [ -n "${COUCH_PASSWORD}"]; then
     HOSTNAME="${COUCH_URL#http://}"
     HOSTNAME="${COUCH_URL#https://}"
     PROTOCOL="${COUCH_URL%%://*}"
-    COUCH_URL_FULL="${PROTOCOL}://${ENCODED_USERNAME}:${ENCODED_PASSWORD}@${HOSTNAME}"
+    export COUCH_URL_FULL="${PROTOCOL}://${ENCODED_USERNAME}:${ENCODED_PASSWORD}@${HOSTNAME}"
 else
-    COUCH_URL_FULL=${COUCH_URL}
+    export COUCH_URL_FULL=${COUCH_URL}
 fi
 
 if [ "$1" == "backup" ] ;then
