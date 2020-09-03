@@ -59,16 +59,7 @@ else
     export COUCH_URL_FULL=${COUCH_URL}
 fi
 
-if [ "$1" == "backup" ] ;then
-    DESTFILE=${DESTINATION_DIRECTORY}/${COUCH_DATABASE}.$(timestamp).txt.gz
-    exec couchbackup \
-        --buffer-size ${BUFFER_SIZE} \
-        --mode ${MODE} \
-        --request-timeout ${REQUEST_TIMEOUT} \
-        --parallelism ${PARALLELISM} \
-        --url ${COUCH_URL_FULL} \
-        --db ${COUCH_DATABASE} | gzip > ${DESTFILE}
-elif [ "$1" == "restore" ]; then
+if [ "$1" == "restore" ]; then
     echo ""
     echo "*** Restore Instructions ***"
     echo "-----------------------------"
@@ -77,8 +68,16 @@ elif [ "$1" == "restore" ]; then
     echo "   cat ${DESTINATION_DIRECTORY}/${COUCH_DATABASE}.<timestamp>.txt.gz | gunzip | couchrestore -db ${COUCH_DATABASE} --url \${COUCH_URL_FULL}"
     echo "-----------------------------"
     exec /bin/bash
-else
-    exec "$@"
+else 
+    DESTFILE=${DESTINATION_DIRECTORY}/${COUCH_DATABASE}.$(timestamp).txt.gz
+    exec couchbackup \
+        --buffer-size ${BUFFER_SIZE} \
+        --mode ${MODE} \
+        --request-timeout ${REQUEST_TIMEOUT} \
+        --parallelism ${PARALLELISM} \
+        --url ${COUCH_URL_FULL} \
+        --db ${COUCH_DATABASE} | gzip > ${DESTFILE}
 fi
+exec "$@"
 
 

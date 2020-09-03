@@ -116,7 +116,7 @@ oc run couchrestore \
    --env=COUCH_PASSWORD=changeme \
    --env=COUCH_URL=https://my-couchdb.couchdb.svc.cluster.local \
    --replicas=0 \
-   --image=byroncollins/couchbackup:nodejs-12-alpine -- restore
+   --image=byroncollins/couchbackup:nodejs-12-alpine -- sh
 
 oc set volumes dc/couchrestore \
    --add --overwrite \
