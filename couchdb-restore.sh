@@ -1,5 +1,5 @@
 kubectl run couchdb-restore \
-    --image byroncollins/couchbackup:nodejs-12-ubi \
+    --image byroncollins/couchbackup:nodejs-12-alpine \
     --rm -ti \
     --restart=Never \
     --overrides='
@@ -43,7 +43,7 @@ kubectl run couchdb-restore \
                 "tty": true,
                 "args": [ "restore" ],
                 "name": "couchdb-restore",
-                "image": "byroncollins/couchbackup:nodejs-12-ubi",
+                "image": "byroncollins/couchbackup:nodejs-12-alpine",
                 "imagePullPolicy": "Always",
                 "volumeMounts": [
                     {
