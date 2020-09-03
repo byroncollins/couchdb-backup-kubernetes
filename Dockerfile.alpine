@@ -28,5 +28,5 @@ RUN apk add --no-cache bash \
 USER 1001
 
 VOLUME ${DESTINATION_DIRECTORY}
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+ENTRYPOINT [ "/opt/app-root/src/docker-entrypoint.sh" ]
 CMD ["backup"]

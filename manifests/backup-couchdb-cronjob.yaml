@@ -16,7 +16,7 @@ spec:
           containers:
           - name: backup
             # the name of your image in the registry
-            image: byroncollins/couchbackup:nodejs-12-alpine
+            image: byroncollins/couchbackup:nodejs-12-ubi
             # environment variables
             env:
               # add your CouchDB configuration here

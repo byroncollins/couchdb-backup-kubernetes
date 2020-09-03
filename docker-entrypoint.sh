@@ -67,7 +67,7 @@ if [ "$1" == "restore" ]; then
     echo "2. Run the following command to restore the database"
     echo "   cat ${DESTINATION_DIRECTORY}/${COUCH_DATABASE}.<timestamp>.txt.gz | gunzip | couchrestore -db ${COUCH_DATABASE} --url \${COUCH_URL_FULL}"
     echo "-----------------------------"
-    exec /bin/bash
+    exec bash
 else 
     DESTFILE=${DESTINATION_DIRECTORY}/${COUCH_DATABASE}.$(timestamp).txt.gz
     exec couchbackup \
@@ -78,6 +78,4 @@ else
         --url ${COUCH_URL_FULL} \
         --db ${COUCH_DATABASE} | gzip > ${DESTFILE}
 fi
-exec "$@"
-
 
