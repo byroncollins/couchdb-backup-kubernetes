@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: backup-couchdb
 spec:
-  # run at the top of every hour see https://crontab.guru/#0_*_*_*_*
+  # At every 30th minute. see https://crontab.guru/#*/30_*_*_*_*
   schedule: "*/30 * * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
